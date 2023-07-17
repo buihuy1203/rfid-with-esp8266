@@ -1,13 +1,14 @@
 /*This is the code for Arduino*/
 
 #include<SerialCommand.h>
-#include<Wire.h>
+#include<Wire.h> //This library allows you to communicate with I2C devices
 #include<LiquidCrystal_I2C.h>
 #include<SPI.h>
 #include<MFRC522.h>
 SerialCommand sCmd;
 #define SS_PIN 10
 #define RST_PIN 9
+
 MFRC522 mfrc522(SS_PIN, RST_PIN); // Create MFRC522 instance.
 LiquidCrystal_I2C lcd(0X27,16,2);
 int relay = 8;
@@ -79,6 +80,7 @@ void loop()
     printMenu();
   }
 }
+
 void printMenu(){
   lcd.clear();
   lcd.setCursor(0, 0);
