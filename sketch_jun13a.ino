@@ -1,13 +1,23 @@
+/*This is the code for NodeMCU ESP-12E*/
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <SoftwareSerial.h>
+
+//rxPin = pin 3, txPin = pin 1; this line has been compress from the "SoftwareSerial s =  SoftwareSerial(rxPin, txPin);"
 SoftwareSerial s(3,1);
-ESP8266WebServer server(80);
+
+// Create a webserver object named "server" that listens for HTTP request on port 80
+ESP8266WebServer server(80); 
+
+//create an array and some const to work with
 char htmlResponse[10000];
 const char* ssid     = "Huy's Galaxy A32";
 const char* password = "tmlw1997";
+
+/*The PROGMEM keyword is a variable modifier, it should be used only with the datatypes defined in pgmspace.h.
+It tells the compiler "put this information into flash memory", instead of into SRAM, where it would normally go*/
 const char openDoor_status[] PROGMEM = R"=====(<h3 style="text-align:center">Cửa đang mở</h3>)=====";
 const char closeDoor_status[] PROGMEM = R"=====(<h3 style="text-align:center">Cửa đang đóng</h3>)=====";
 const char webPage_html[] PROGMEM = R"=====(<!DOCTYPE html>
@@ -60,7 +70,7 @@ const char webPage_html[] PROGMEM = R"=====(<!DOCTYPE html>
           $('#btnlogin').click(function() {
             myID = $('#username').val();
             myPass = $('#inputPassword').val();
-            if (myID === "huynoname" && myPass === "15297583") {
+            if (myID === "teamnobrain" && myPass === "1900100co") {
               isLoggedIn=true;
               $('#login').remove();
               $('#main').show();
@@ -108,35 +118,50 @@ const char webPageUpdate_html[] PROGMEM = R"=====(<!DOCTYPE html>
         </div>
     </body>
 </html>)=====";
+
+//handleRoot is the root of the webpage on the webserver
 void handleRoot() {
+  //Store webPage_html content in the buffer point by htmlResponse
   snprintf(htmlResponse, 10000, webPage_html);
+  // Send HTTP status 200 (Ok) and send the content of WebPage_html to the browser/client
   server.send ( 200, "text/html", htmlResponse );
 }
+
+//Open door = bat
 void bat1(){
   Serial.println("bat1");
   s.print("bat1\n");
   snprintf(htmlResponse, 10000, webPageUpdate_html);
   server.send ( 200, "text/html", htmlResponse );
 }
+
+//Close door = tat
 void tat1(){
   s.print("tat1\n");
   Serial.println("tat1");
   snprintf(htmlResponse, 10000, webPageUpdate_html);
   server.send ( 200, "text/html", htmlResponse );
 }
+
+//Delete the rfid card - Xoa the
 void bat2(){
   s.print("bat2\n");
   Serial.println("bat2");
   snprintf(htmlResponse, 10000, webPageUpdate_html);
   server.send ( 200, "text/html", htmlResponse );
 }
+
+//Change the rfid card - Doi the
 void tat2(){
   s.print("tat2\n");
   Serial.println("tat2");
   snprintf(htmlResponse, 10000, webPageUpdate_html);
   server.send ( 200, "text/html", htmlResponse );
 }
+
+//Setup the hardware for the ESP broad
 void setup() {
+  //Set the baud rate for the SoftwareSerial object ("s") and normal serial to 115200 bits per second
   s.begin(115200);
   Serial.begin(115200);
   delay(10);
@@ -145,7 +170,8 @@ void setup() {
   Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
-  WiFi.begin(ssid, password);
+  //connect to the wifi with the said ssid and password
+  WiFi.begin(ssid, password); 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
@@ -164,6 +190,7 @@ void setup() {
   delay(1000);
 }
 
+//equivalent of main in .c file. Loop the handleClient function of server.
 void loop() {
   server.handleClient();
   }
