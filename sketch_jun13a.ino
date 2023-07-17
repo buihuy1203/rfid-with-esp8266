@@ -1,4 +1,4 @@
-/*code for NodeMCU ESP-12E*/
+/*This is the code for NodeMCU ESP-12E*/
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 #include <ESP8266WiFi.h>
@@ -70,7 +70,7 @@ const char webPage_html[] PROGMEM = R"=====(<!DOCTYPE html>
           $('#btnlogin').click(function() {
             myID = $('#username').val();
             myPass = $('#inputPassword').val();
-            if (myID === "huynoname" && myPass === "15297583") {
+            if (myID === "teamnobrain" && myPass === "1900100co") {
               isLoggedIn=true;
               $('#login').remove();
               $('#main').show();
@@ -119,13 +119,15 @@ const char webPageUpdate_html[] PROGMEM = R"=====(<!DOCTYPE html>
     </body>
 </html>)=====";
 
-//
+//handleRoot is the root of the webpage on the webserver
 void handleRoot() {
+  //Store webPage_html content in the buffer point by htmlResponse
   snprintf(htmlResponse, 10000, webPage_html);
+  // Send HTTP status 200 (Ok) and send the content of WebPage_html to the browser/client
   server.send ( 200, "text/html", htmlResponse );
 }
 
-//
+//Open door = bat
 void bat1(){
   Serial.println("bat1");
   s.print("bat1\n");
@@ -133,7 +135,7 @@ void bat1(){
   server.send ( 200, "text/html", htmlResponse );
 }
 
-//
+//Close door = tat
 void tat1(){
   s.print("tat1\n");
   Serial.println("tat1");
@@ -141,7 +143,7 @@ void tat1(){
   server.send ( 200, "text/html", htmlResponse );
 }
 
-//
+//Delete the rfid card - Xoa the
 void bat2(){
   s.print("bat2\n");
   Serial.println("bat2");
@@ -149,7 +151,7 @@ void bat2(){
   server.send ( 200, "text/html", htmlResponse );
 }
 
-//
+//Change the rfid card - Doi the
 void tat2(){
   s.print("tat2\n");
   Serial.println("tat2");
